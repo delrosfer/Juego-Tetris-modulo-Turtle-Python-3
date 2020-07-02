@@ -4,7 +4,7 @@ import random
 
 ventana = turtle.Screen()
 ventana.title("Creando Tetris con Turtle")
-ventana.bgcolor("black")
+ventana.bgcolor("lightgreen")
 ventana.setup(width=600, height=800)
 ventana.tracer(0)
 
@@ -42,7 +42,7 @@ class Shape():
 		t = [[0,1,0],
 		     [1,1,1]]
 
-		shapes = [square, horizontal_line, vertical_line, left_l, right_l, left_s, right_s]
+		shapes = [square, horizontal_line, vertical_line, left_l, right_l, left_s, right_s, t]
 
 		#elegir una figura aleatoria cada vez
 		self.shape = random.choice(shapes)
@@ -86,6 +86,24 @@ class Shape():
 
 		return result
 
+	def rotate(self, grid):
+		#primero borrar la figura
+		self.erase_shape(grid)
+		rotated_shape = []
+		for x in range(len(self.shape[0])):
+			new_row = []
+			for y in range(len(self.shape)-1, -1, -1):
+				new_row.append(self.shape[y][x])
+			rotated_shape.append(new_row)
+
+		right_side = self.x + len(rotated_shape[0])
+		if right_side < len(grid[0]):
+
+			self.shape = rotated_shape
+			#actualizar antura y anchura
+			self.height = len(self.shape)
+			self.width = len(self.shape[0])
+
 grid = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -120,6 +138,7 @@ pen.penup()
 pen.speed(0)
 pen.shape("square")
 pen.setundobuffer(None)
+
 
 def draw_grid(pen, grid):
 	pen.clear()
@@ -160,10 +179,11 @@ def check_grid(grid):
 					grid[copy_y][copy_x] = grid[copy_y-1][copy_x]
 
 def draw_score(pen, score):
+	pen.color("blue")
 	pen.hideturtle()
 	pen.goto(-75, 300)
-	pen.write("Puntuacion: {}".format(score), move=False, align="left", font=("Arial", 20, "normal"))
-	pen.showturtle()
+	pen.write("Puntuación: {}".format(score), move=False, align="left", font=("Arial", 20, "normal"))
+	
 
 #crear la figura basica para iniciar el juego
 shape = Shape()
@@ -177,6 +197,7 @@ grid[shape.y][shape.x] = shape.color
 ventana.listen()
 ventana.onkeypress(lambda: shape.move_left(grid), "Left")
 ventana.onkeypress(lambda: shape.move_right(grid), "Right")
+ventana.onkeypress(lambda: shape.rotate(grid), "space")
 
 #colocar la puntuacion a 0
 score = 0
@@ -217,8 +238,8 @@ while True:
 	
 #dibujar la pantalla
 	
-	draw_score(pen, score)	
 	draw_grid(pen, grid)
+	draw_score(pen, score)
 
 	time.sleep(delay)
 
