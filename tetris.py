@@ -42,7 +42,10 @@ class Shape():
 		t = [[0,1,0],
 		     [1,1,1]]
 
-		shapes = [square, horizontal_line, vertical_line, left_l, right_l, left_s, right_s, t]
+		t_normal = [[1,1,1],
+		            [0,1,0]]
+
+		shapes = [square, horizontal_line, vertical_line, left_l, right_l, left_s, right_s, t, t_normal]
 
 		#elegir una figura aleatoria cada vez
 		self.shape = random.choice(shapes)
@@ -128,7 +131,7 @@ grid = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 1, 2, 3, 0, 0, 0, 7, 1, 2, 3, 4]
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
 print(len(grid))
@@ -142,8 +145,8 @@ pen.setundobuffer(None)
 
 def draw_grid(pen, grid):
 	pen.clear()
-	top = 230
-	left = -110
+	top = 270
+	left = -130
 
 	colors = ["black", "lightblue", "blue", "orange", "yellow", "green", "purple","red", "gray", "brown", "pink"]
 
